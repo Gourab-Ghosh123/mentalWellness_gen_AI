@@ -1,2 +1,2 @@
-web: gunicorn mentalWellness_gen_AI.wsgi
+web: gunicorn wellness.wsgi
 release: python manage.py migrate --noinput && python manage.py collectstatic --noinput
