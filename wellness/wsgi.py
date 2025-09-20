@@ -1,5 +1,7 @@
 import os
 import sys
+from whitenoise import WhiteNoise
+
 
 # Path to the folder containing manage.py
 project_home = '/home/ggourab2004/WELLNESS'
@@ -15,3 +17,4 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'wellness.settings'
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
+application = WhiteNoise(application)
