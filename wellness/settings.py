@@ -145,5 +145,3 @@ LOGIN_REDIRECT_URL = '/chat/'
 # (optional) after logout
 LOGOUT_REDIRECT_URL = '/login/'
 
-
-GENAI_API_KEY = 'AIzaSyCYxXkxAxLOY2Bx9ULiHB73TBm7Q0HYUwo'
