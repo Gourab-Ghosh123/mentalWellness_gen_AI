@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentalCare - Chat</title>
+    <style>
+        #chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border: none;
+            border-radius: 50%;
+            background: #4f46e5;
+            color: azure;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+      #chatbot {
+    position: fixed;
+    top: 10%;              /* push down a bit */
+    left: 10%;             /* push right a bit */
+    width: 80%;            /* take 80% width */
+    height: 80%;           /* take 80% height */
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: none;         /* stays hidden until opened */
+    flex-direction: column;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    z-index: 9999;         /* make sure it stays on top */
+}
+
+        #header {
+            background: #4f46e5;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #message {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin: 5px;
+            padding: 10px;
+            border-radius: 12px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .bot {
+            background: #f1f5f9;
+            align-self: flex-start;
+        }
+
+        .user {
+            background: #4f46e5;
+            color: white;
+            align-self: flex-end;
+        }
+
+        #input {
+            border-top: 1px solid #ddd;
+            padding: 5px;
+        }
+
+        #input form {
+            display: flex;
+            width: 100%;
+        }
+
+        #input input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        #input button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Toggle Button -->
+    <button id="chatbot-toggle">💬</button>
+
+    <!-- Chatbot Popup -->
+    <div id="chatbot">
+        <div id="header">
+            💙 Youth Wellness Bot
+            <form action="{% url 'clear_chat' %}" method="POST" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" style="background:none;border:none;color:white;cursor:pointer;">🗑️</button>
+            </form>
+        </div>
+
+        <!-- Chat Messages -->
+        <div id="message">
+            {% if chats %}
+                {% for chat in chats %}
+                    <div class="message user"><strong>You:</strong> {{ chat.message }}</div>
+                    <div class="message bot"><strong>AI:</strong> {{ chat.response }}</div>
+                {% endfor %}
+            {% else %}
+                <p>No chats yet. Start by sending a message!</p>
+            {% endif %}
+        </div>
+
+        <!-- Message Form -->
+        <div id="input">
+            <form method="POST" id="chat-form">
+                {% csrf_token %}
+                <input type="text" name="message" id="user-input" placeholder="Type your message..." required>
+                <button type="submit" id="send-btn">➤</button>
+            </form>
+        </div>
+    </div>
+
+   <script>
+    const chatbotToggle = document.getElementById("chatbot-toggle");
+    const chatbot = document.getElementById("chatbot");
+
+    // Load saved state
+    if (localStorage.getItem("chatOpen") === "true") {
+        chatbot.style.display = "flex";
+    }
+
+    chatbotToggle.addEventListener("click", () => {
+        const isOpen = chatbot.style.display === "flex";
+        chatbot.style.display = isOpen ? "none" : "flex";
+        localStorage.setItem("chatOpen", !isOpen);
+    });
+
+    // Auto scroll
+    var messages = document.getElementById("message");
+    messages.scrollTop = messages.scrollHeight;
+</script>

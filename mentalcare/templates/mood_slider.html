@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mood Diary</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #fef6e4, #f3e8ff);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .mood-card {
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 12px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+    }
+    .mood-emoji {
+      font-size: 2rem;
+    }
+    /* Slider Style */
+    #mood {
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+      background: linear-gradient(to right, #ef4444, #facc15, #22c55e, #3b82f6, #a855f7);
+      outline: none;
+    }
+    #mood::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #333;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    #mood::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body class="container py-4">
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="mb-4">🌱 Mood Slider</h2>
+    <button class="btn btn-info" onclick="location.reload()">🔄 Refresh</button>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    <label for="mood" class="form-label">How are you feeling today?</label>
+    <div class="d-flex align-items-center gap-2">
+      <input type="range" min="1" max="10" value="5" id="mood" name="mood" class="form-range">
+      <span id="moodEmoji" style="font-size:1.8rem;">🙂</span>
+    </div>
+    <button class="btn btn-success my-3" type="submit">Save Mood</button>
+  </form>
+
+  <!-- Supportive Message -->
+  {% if supportive_message %}
+    <div class="alert alert-info mt-3">
+      💡 {{ supportive_message.content }}
+    </div>
+  {% endif %}
+
+  <!-- Weekly Average -->
+  {% if avg_mood %}
+    <div class="alert alert-warning mt-3">
+      🌟 Your average mood this week: <strong>{{ avg_mood }}/10</strong>
+    </div>
+  {% endif %}
+
+  <h4 class="mt-4">📝 Your Mood Diary</h4>
+  <div id="moodDiary">
+    {% for mood in moods %}
+      <div class="mood-card">
+        <span class="mood-emoji">{{ mood.get_emoji }}</span>
+        <div>
+          <strong>Mood: {{ mood.mood_value }}/10</strong><br>
+          <small>{{ mood.date|date:"M d, Y" }}</small>
+        </div>
+      </div>
+    {% empty %}
+      <p>No moods saved yet 🌱</p>
+    {% endfor %}
+  </div>
+
+  <script>
+    const moodSlider = document.getElementById("mood");
+    const moodEmoji = document.getElementById("moodEmoji");
+
+    const emojis = ["😭","😢","☹️","😕","😐","🙂","😊","😄","😁","🤩"];
+
+    moodSlider.addEventListener("input", () => {
+      moodEmoji.textContent = emojis[moodSlider.value - 1];
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+</head>
+<body style="background: url('{% static "images/bg2_.jpg" %}') no-repeat center center; background-size: cover;">
+
+
+    <!-- Background image
+    <img src="{% static 'images/bg2_.jpg' %}" alt="Background" class="bg-image"> -->
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="input-box">
+                <input type="text" name="username" placeholder="Username">
+            </div>
+
+            <div class="input-box">
+                <input type="password" name="password" placeholder="Password">
+            </div>
+
+            <div class="forgot">
+                <label><input type="checkbox"> Remember me</label>
+                <p><a href="#">Forgot password?</a></p>
+            </div>
+
+            <button type="submit" class="btn">Login</button>
+
+            <div class="extra-links">
+                <p><a href="{% url 'signup' %}">Don’t have an account?</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script src="{% static 'login.js' %}"></script>
+</body>
+</html>
