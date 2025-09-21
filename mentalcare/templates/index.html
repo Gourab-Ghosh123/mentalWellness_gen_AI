@@ -391,12 +391,32 @@
             <li class="nav-item">
               <a class="nav-link main-btn emergency-btn" href="{% url 'helpline' %}">Emergency Help</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link main-btn login-btn" href="{% url 'login' %}">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link main-btn login-btn" href="{% url 'signup' %}">SignUp</a>
-            </li>
+          {% if user.is_authenticated %}
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ user.username }}
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+        <li>
+            <a class="dropdown-item" href="{% url 'progress_tracker' %}">Progress Tracker</a>
+        </li>
+        <li>
+            <form method="POST" action="{% url 'logout' %}" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item">Logout</button>
+            </form>
+        </li>
+    </ul>
+</li>
+{% else %}
+<li class="nav-item">
+    <a class="nav-link main-btn login-btn" href="{% url 'login' %}">Login</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link main-btn login-btn" href="{% url 'signup' %}">SignUp</a>
+</li>
+{% endif %}
+
           </ul>
         </div>
       </div>
@@ -407,8 +427,11 @@
       <div class="container d-flex flex-wrap align-items-center">
         <div class="hero-text col-lg-6 col-12">
     <p id="quote">"The journey of a thousand miles begins with a single step."</p>
+    {% if user.is_authenticated %}
     <p id="greeting">Hello, <span id="username">{{ user.username }}</span>! Welcome back. 😊</p>
+    {% endif %}
 </div>
+
 
         <div class="mood-slider-container col-lg-6 col-12">
           <div class="mood-slider-box">
