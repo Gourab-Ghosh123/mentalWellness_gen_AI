@@ -1,268 +1,594 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeCare</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+      color: #333;
+    }
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    .navigation-wrap {
+      position: fixed;
+      width: 100%;
+      left: 0;
+      z-index: 1000;
+      transition: all 0.3s ease-out;
+      background-color: transparent;
+    }
 
-  <title>Hello, world!</title>
+    .navigation-wrap .nav-item {
+      padding: 0 10px;
+      transition: all 0.3s linear;
+    }
 
-<style>
-        #chatbot-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            border: none;
-            border-radius: 50%;
-            background: #4f46e5;
-            color: azure;
-            width: 60px;
-            height: 60px;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+    .navbar-brand img {
+      height: 80px;
+      width: 80px;
+    }
 
-        #chatbot {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 400px;
-            height: 500px;
-            border: 1px solid #ccc;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-        }
+    .navbar-brand p {
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #5d5d5d;
+    }
 
-        #header {
-            background: #4f46e5;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .navigation-wrap .nav-link {
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: capitalize;
+      color: #5d5d5d;
+      letter-spacing: 1px;
+      transition: all 0.3s linear;
+    }
 
-        #message {
-            flex: 1;
-            padding: 10px;
-            overflow-y: auto;
-        }
+    .navigation-wrap .nav-link:hover,
+    .navigation-wrap .nav-link.active {
+      color: #ff6f61;
+    }
 
-        .message {
-            margin: 5px;
-            padding: 10px;
-            border-radius: 12px;
-            max-width: 80%;
-            line-height: 1.4;
-        }
+    .hero-section {
+      padding-top: 120px;
+      padding-bottom: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        .bot {
-            background: #f1f5f9;
-            align-self: flex-start;
-        }
+    .hero-text {
+      flex: 1;
+      padding: 20px;
+      text-align: left;
+    }
 
-        .user {
-            background: #4f46e5;
-            color: white;
-            align-self: flex-end;
-        }
+    .hero-text p {
+      font-size: 1.8rem;
+      font-weight: 500;
+      line-height: 1.5;
+      color: #5d5d5d;
+    }
 
-        #input {
-            border-top: 1px solid #ddd;
-            padding: 5px;
-        }
+    .hero-text p strong {
+      font-weight: 700;
+      color: #ff6f61;
+    }
 
-        #input form {
-            display: flex;
-            width: 100%;
-        }
+    .mood-slider-container {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
 
-        #input input {
-            flex: 1;
-            border: none;
-            padding: 10px;
-            font-size: 14px;
-        }
+    .mood-slider-box {
+      background: #f0e6ff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+    }
 
-        #input button {
-            background: #4f46e5;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            cursor: pointer;
-        }
-      </style>
+    h2 {
+      font-size: 2rem;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
 
+    .mood-display {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      animation: pulse 1s infinite alternate;
+    }
 
-  
+    @keyframes pulse {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.1);
+      }
+    }
+
+    #mood-slider {
+      width: 100%;
+      height: 12px;
+      border-radius: 6px;
+      background: linear-gradient(to right, #ff6f61, #f1c40f, #2ecc71);
+      appearance: none;
+      outline: none;
+      transition: background 0.3s;
+    }
+
+    #mood-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 4px solid #ff6f61;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.3s;
+    }
+
+    #mood-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+
+    .button {
+      background: #5d5d5d;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 20px;
+    }
+
+    .button:hover {
+      background: #ff6f61;
+      transform: translateY(-2px);
+    }
+
+    .suggestion-section {
+      padding: 50px 0;
+      text-align: center;
+    }
+
+    .suggestion-section h2 {
+      margin-bottom: 30px;
+      color: #5d5d5d;
+    }
+
+    .carousel-item img {
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .community-section {
+      padding: 50px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .sky-btn {
+      background: linear-gradient(to bottom, #87ceeb, #4682b4);
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 12px 24px;
+      border-radius: 30px;
+      border: none;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .sky-btn:hover {
+      background: linear-gradient(to bottom, #5dade2, #2e86c1);
+      transform: translateY(-3px);
+      box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    .community-text {
+      margin-top: 20px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #5d5d5d;
+    }
+
+    @media (max-width: 991px) {
+      .hero-section {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-text,
+      .mood-slider-container {
+        flex: none;
+        width: 100%;
+      }
+
+      .hero-text {
+        margin-bottom: 30px;
+      }
+    }
+
+    footer {
+      background-color: rgba(255, 255, 255, 0.7);
+      color: #5d5d5d;
+      font-size: 0.9rem;
+      padding: 20px 0;
+      margin-top: 50px;
+    }
+
+    .footer-links a,
+    .social-icon {
+      color: #5d5d5d;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      margin: 0 10px;
+    }
+
+    .footer-links a:hover {
+      color: #ff6f61;
+    }
+
+    .social-icon {
+      font-size: 1.2rem;
+    }
+
+    .social-icon:hover {
+      color: #ff6f61;
+    }
+
+    .footer-text p {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Chatbot CSS from your old code */
+    #chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      border: none;
+      border-radius: 50%;
+      background: #4f46e5;
+      color: azure;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #chatbot {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 400px;
+      height: 500px;
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    #header {
+      background: #4f46e5;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #message {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin: 5px;
+      padding: 10px;
+      border-radius: 12px;
+      max-width: 80%;
+      line-height: 1.4;
+    }
+
+    .bot {
+      background: #f1f5f9;
+      align-self: flex-start;
+    }
+
+    .user {
+      background: #4f46e5;
+      color: white;
+      align-self: flex-end;
+    }
+
+    #input {
+      border-top: 1px solid #ddd;
+      padding: 5px;
+    }
+
+    #input form {
+      display: flex;
+      width: 100%;
+    }
+
+    #input input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    #input button {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-info">
-    <img src="{% static 'logo.jpg' %}" style="height:50px" width="50px">
-    <a class="navbar-brand" href="{% url 'home' %}">VibeCare</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <header>
+    <nav class="navbar navbar-expand-lg navigation-wrap">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+          <img src="{% static 'f.png' %}" class="img-fluid" alt="VibeCare Logo">
+          <p class="mb-0">VibeCare</p>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-stream navbar-toggler-icon"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'chat' %}">Chat</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'mood_slider' %}">Mood Slider</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'mood_suggestions' %}">Suggestion</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'community_home' %}">Community</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link main-btn emergency-btn" href="{% url 'helpline' %}">Emergency Help</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link main-btn login-btn" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link main-btn login-btn" href="{% url 'signup' %}">SignUp</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section id="home" class="hero-section">
+      <div class="container d-flex flex-wrap align-items-center">
+        <div class="hero-text col-lg-6 col-12">
+    <p id="quote">"The journey of a thousand miles begins with a single step."</p>
+    <p id="greeting">Hello, <span id="username">{{ user.username }}</span>! Welcome back. 😊</p>
+</div>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{%url 'home'%}">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'chat' %}">Chat</a>
-        </li>
-      
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Features
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{% url 'mood_slider' %}">Mood Slider</a>
-            <a class="dropdown-item" href="{% url 'community_home' %}">COMMUNITY</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{% url 'mood_suggestions' %}">MOOD SUGGESTIONS</a>
-            <a class="dropdown-item" href="{% url 'helpline' %}">Helpline</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}">About us</a>
-        </li>
-
-      </ul>
-<div class="mx-2">
-      {% if user.is_authenticated %}
-        <div class="dropdown d-inline">
-          <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
-             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Welcome, {{ user.username }}!
-          </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="{% url 'progress_tracker' %}">My Progress</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        <div class="mood-slider-container col-lg-6 col-12">
+          <div class="mood-slider-box">
+            <h2>How are you feeling today?</h2>
+            <p>Drag the slider to reflect your current mood.</p>
+            <div class="mood-display" id="mood-emoji">😊</div>
+            <form method="POST" action="{% url 'mood_slider' %}" class="d-flex flex-column align-items-center">
+              {% csrf_token %}
+              <input type="range" min="1" max="10" value="5" id="mood-slider" name="mood">
+              <button type="submit" class="button">Save Mood</button>
+            </form>
           </div>
         </div>
-      {% else %}
-        <a href="{% url 'login' %}" style="color: aliceblue;">Login</a>
-        <a href="{% url 'signup' %}" style="color: aliceblue; margin-left: 10px;">Sign Up</a>
-      {% endif %}
+      </div>
+    </section>
+    <section id="moodsuggestions" class="suggestion-section">
+      <div class="container">
+        <h2>Breathe. We're here to help!</h2>
+        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <a href="{% url 'mood_suggestions' %}">
+                <img src="{% static '1.jpg' %}" class="d-block w-100" alt="Mindfulness activity image">
+              </a>
+            </div>
+            <div class="carousel-item">
+              <a href="{% url 'mood_suggestions' %}">
+                <img src="{% static 'sun.jpg' %}" class="d-block w-100" alt="Positive affirmations image">
+              </a>
+            </div>
+            <div class="carousel-item">
+              <a href="{% url 'mood_suggestions' %}">
+                <img src="{% static '4.jpg' %}" class="d-block w-100" alt="Mental health support image">
+              </a>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="community" class="community-section">
+      <div class="container">
+        <button class="sky-btn">
+          <a href="{% url 'community_home' %}" style="text-decoration: none; color: white;">Community Board</a>
+        </button>
+        <div class="community-text">The first step to healing is being seen.<br>Let's see and support each other here.
+        </div>
+      </div>
+    </section>
+  </main>
+  <button id="chatbot-toggle">💬</button>
+  <div id="chatbot">
+    <div id="header">
+      💙 Youth Wellness Bot
+      <form action="{% url 'clear_chat' %}" method="POST" style="margin:0;">
+        {% csrf_token %}
+        <button type="submit" style="background:none;border:none;color:white;cursor:pointer;">🗑️</button>
+      </form>
+    </div>
+    <div id="message">
+      {% for chat in chat %}
+      <div class="message user"><strong>You:</strong> {{ chat.message }}</div>
+      <div class="message bot"><strong>AI:</strong> {{ chat.response }}</div>
+      {% empty %}
+      <p>No chats yet. Start by sending a message!</p>
+      {% endfor %}
+    </div>
+    <div id="input">
+      <form method="POST" action="{% url 'chat' %}" id="chat-form">
+        {% csrf_token %}
+        <input type="text" name="message" id="user-input" placeholder="Type your message..." required>
+        <button type="submit" id="send-btn">➤</button>
+      </form>
     </div>
   </div>
-</nav>
-
-  <div class="navbar-2">
-    <p class=heading2>💙A Safe Space for Your Mind</p>
-  </div>
 
 
+  <!-- Floating General Knowledge Button (Left Side) -->
+<a href="https://www.wikipedia.org/" target="_blank" class="general-knowledge-btn">
+    <i class="fa-solid fa-bullhorn"></i>
+</a>
+
+<!-- Styles for the button -->
+<style>
+.general-knowledge-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* moved from right to left */
+    background-color: #8ec5fc; 
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    z-index: 999;
+    cursor: pointer;
+}
+
+.general-knowledge-btn i {
+    font-size: 1.5rem;
+}
+
+.general-knowledge-btn:hover {
+    background-color: #6a9bd6;
+    transform: scale(1.1) translateY(-5px);
+}
+</style>
 
 
-<!-- Mood Tracker -->
-  <h1>👋 Welcome, {{ user.username }}!</h1>
-  <p>Track your mood quickly right from here:</p>
 
-  <!-- Mood Slider Inline -->
-  <form method="POST" action="{% url 'mood_slider' %}">
-  {% csrf_token %}
-  <input type="range" name="mood" min="1" max="10">  <!-- name matches view -->
-  <button type="submit">Save Mood</button>
-</form>
-
-
-
-
-
- <!--Chatbox-->
-    
-    <!-- Toggle Button -->
-    <button id="chatbot-toggle">💬</button>
-
-    <!-- Chatbot Popup -->
-    <div id="chatbot">
-        <div id="header">
-            💙 Youth Wellness Bot
-            <form action="{% url 'clear_chat' %}" method="POST" style="margin:0;">
-                {% csrf_token %}
-                <button type="submit" style="background:none;border:none;color:white;cursor:pointer;">🗑️</button>
-            </form>
-        </div>
-
-        <!-- Chat Messages -->
-        <div id="message">
-            {% if chats %}
-                {% for chat in chats %}
-                    <div class="message user"><strong>You:</strong> {{ chat.message }}</div>
-                    <div class="message bot"><strong>AI:</strong> {{ chat.response }}</div>
-                {% endfor %}
-            {% else %}
-                <p>No chats yet. Start by sending a message!</p>
-            {% endif %}
-        </div>
-
-        <!-- Message Form -->
-        <div id="input">
-            <form method="POST" action ="{% url 'chat' %}" id="chat-form">
-                {% csrf_token %}
-                <input type="text" name="message" id="user-input" placeholder="Type your message..." required>
-                <button type="submit" id="send-btn">➤</button>
-            </form>
-        </div>
+  <footer>
+    <div class="container text-center py-4">
+      <div class="footer-links mb-3">
+        <a href="{% url 'home' %}">Home</a> | <a href="{% url 'mood_slider' %}">Mood Slider</a> | <a
+          href="{% url 'community_home' %}">Community</a> | <a href="{% url 'helpline' %}">Emergency</a>
+      </div>
+      <div class="social-icons mb-3">
+        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+      <div class="footer-text">
+        <p>&copy; <span id="current-year"></span> VibeCare. All rights reserved.</p>
+        <p>Designed with care for your mental well-being.</p>
+      </div>
     </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const moodSlider = document.getElementById('mood-slider');
+    const moodEmoji = document.getElementById('mood-emoji');
+    const emojis = ["😭", "😥", "😟", "🙁", "😐", "🙂", "😊", "😁", "😃", "🤩"];
 
-   <script>
+    function updateEmoji() {
+      const value = parseInt(moodSlider.value);
+      moodEmoji.textContent = emojis[value - 1];
+    }
+
+    moodSlider.addEventListener('input', updateEmoji);
+    document.addEventListener('DOMContentLoaded', updateEmoji);
+
     const chatbotToggle = document.getElementById("chatbot-toggle");
     const chatbot = document.getElementById("chatbot");
 
-    // Load saved state
     if (localStorage.getItem("chatOpen") === "true") {
-        chatbot.style.display = "flex";
+      chatbot.style.display = "flex";
     }
 
     chatbotToggle.addEventListener("click", () => {
-        const isOpen = chatbot.style.display === "flex";
-        chatbot.style.display = isOpen ? "none" : "flex";
-        localStorage.setItem("chatOpen", !isOpen);
+      const isOpen = chatbot.style.display === "flex";
+      chatbot.style.display = isOpen ? "none" : "flex";
+      localStorage.setItem("chatOpen", !isOpen);
     });
 
-    // Auto scroll
-    var messages = document.getElementById("message");
-    messages.scrollTop = messages.scrollHeight;
-</script>
+    const messagesContainer = document.getElementById("message");
+    if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    
 
 
-
-
-
-
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-    crossorigin="anonymous"></script>
+  </script>
 </body>
 
 </html>

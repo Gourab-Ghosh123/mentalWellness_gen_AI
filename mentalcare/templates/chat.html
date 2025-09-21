@@ -21,22 +21,23 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-      #chatbot {
+     #chatbot {
     position: fixed;
-    top: 10%;              /* push down a bit */
-    left: 10%;             /* push right a bit */
-    width: 80%;            /* take 80% width */
-    height: 80%;           /* take 80% height */
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
     border: 1px solid #ccc;
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    display: none;         /* stays hidden until opened */
+    display: flex;  /* <-- open by default */
     flex-direction: column;
     overflow: hidden;
     font-family: Arial, sans-serif;
-    z-index: 9999;         /* make sure it stays on top */
+    z-index: 9999;
 }
+
 
         #header {
             background: #4f46e5;
