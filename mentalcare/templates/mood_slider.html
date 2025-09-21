@@ -46,6 +46,14 @@
     #mood::-webkit-slider-thumb:hover {
       transform: scale(1.2);
     }
+
+  
+.quote-style {
+    font-family: 'Georgia', serif;
+    font-style: italic; 
+    font-size: 1.1em;
+    color: #444;
+}
   </style>
 </head>
 <body class="container py-4">
@@ -64,6 +72,14 @@
     </div>
     <button class="btn btn-success my-3" type="submit">Save Mood</button>
   </form>
+
+  <div id="quoteDisplay" class="mt-3 text-center p-3">
+      <p>Move the slider to get a quote!</p>
+  </div>
+
+
+  
+
 
   <!-- Supportive Message -->
   {% if supportive_message %}
@@ -97,11 +113,34 @@
   <script>
     const moodSlider = document.getElementById("mood");
     const moodEmoji = document.getElementById("moodEmoji");
+    const quoteDisplay = document.getElementById("quoteDisplay");
 
     const emojis = ["😭","😢","☹️","😕","😐","🙂","😊","😄","😁","🤩"];
 
-    moodSlider.addEventListener("input", () => {
-      moodEmoji.textContent = emojis[moodSlider.value - 1];
+    // for quotes , for each mood value
+
+    const quotes = [
+    "It's okay to feel this way . Things will get better for sure !",
+    "Take a deep breath . You are way strong enough to handle all of these !",
+    "Progress doesnt follows linearity . Be patient to yourself and wait for things to work out !",
+    "One step at a time . You are doing great !",
+    "You are worthy enough of happyness anad rest !",
+    "Let's find a moment of gratitude in your day , no matter how small it is !",
+    "Keep shining . Your inner light is Glamorous !",
+    "Smile at a stranger today . Your happyness can be contagious !",
+    "You are doing great ! Keep staying the way you are !",
+    "You are ROCKING it ! Embrace it and keep going !"
+    ];
+
+      moodSlider.addEventListener("input", () => {
+        const moodValue = parseInt(moodSlider.value, 10);
+        
+        // emoji
+        moodEmoji.textContent = emojis[moodValue - 1];
+
+        // quote display
+        const quoteText = quotes[moodValue];
+        quoteDisplay.innerHTML = `<p><em class="quote-style">"${quoteText}"</em></p>`;
     });
   </script>
 </body>
