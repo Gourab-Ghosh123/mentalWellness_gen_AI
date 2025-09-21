@@ -24,4 +24,5 @@ urlpatterns = [
     path('' , include('community.urls')),
     path('' , include('userprofile.urls')),
     path('' , include('moodsuggest.urls')),
+    path('' , include('helpline.urls')),
 ]

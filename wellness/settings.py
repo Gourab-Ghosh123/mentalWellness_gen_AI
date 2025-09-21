@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'community',
     'userprofile',
     'moodsuggest',
+    'helpline',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Helplines</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <style>
+        body {
+            background: linear-gradient(to right, #FFEFBA, #FFFFFF);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        h2 {
+            color: #333333;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .helpline-card {
+            border-radius: 12px;
+            padding: 25px;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .helpline-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .helpline-number {
+            font-weight: 600;
+            color: #E63946;
+            font-size: 1.2rem;
+        }
+
+        .helpline-description {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .search-filter {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .search-filter input, .search-filter select {
+            display: inline-block;
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .fa-phone {
+            color: #E63946;
+            margin-right: 8px;
+        }
+
+        .container {
+            max-width: 1000px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <h2 class="text-center">Mental Health Helplines</h2>
+
+    <!-- Search & Filter -->
+    <form method="get" class="search-filter">
+        <input type="text" name="search" placeholder="Search helpline..." value="{{ search }}" class="form-control d-inline-block w-auto me-2">
+        <select name="category" class="form-select d-inline-block w-auto me-2">
+            <option value="">All Categories</option>
+            {% for code, name in categories %}
+                <option value="{{ code }}" {% if selected_category == code %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-primary">Filter</button>
+    </form>
+
+    <!-- Helpline Cards -->
+    <div class="row g-4">
+    {% for helpline in helplines %}
+    <div class="col-md-6">
+        <div class="helpline-card">
+            <h5>{{ helpline.name }}</h5>
+            <p class="helpline-number">
+                <i class="fa fa-phone"></i>
+                <a href="tel:{{ helpline.number }}">{{ helpline.number }}</a>
+            </p>
+            {% if helpline.description %}
+            <p class="helpline-description">{{ helpline.description }}</p>
+            {% endif %}
+            {% if helpline.website %}
+            <p class="helpline-description">
+                Website: <a href="{{ helpline.website }}" target="_blank">{{ helpline.website }}</a>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center">No helplines found.</p>
+    {% endfor %}
+</div>
+
+</div>
+
+</body>
+</html>
